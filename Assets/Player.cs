@@ -3,16 +3,26 @@
 public class Player : MonoBehaviour
 {
     public float moveSpeed = 5f; // kecepatan gerak
+    public float jumpforce = 8;
     private Rigidbody rb;
+    private bool isGrounded;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded) 
+        {
+            rb.AddForce(Vector3.up * jumpforce, ForceMode.Impulse);
+            isGrounded = false; 
+        }
+    }
     private void FixedUpdate()
     {
-        // Input kiri (-1) kanan (1)
+        // Input kiri (-1) kanan 9(1)
         float moveX = Input.GetAxis("Horizontal"); // default: A/D atau ? ?
 
         // Buat arah gerak hanya di sumbu X
@@ -24,6 +34,10 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = true;  
+        }
         if (collision.gameObject.CompareTag("Obstacle"))
         {
             Die();
