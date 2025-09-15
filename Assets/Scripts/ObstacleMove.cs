@@ -12,15 +12,20 @@ public class ObstacleMove : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.Instance != null && GameManager.Instance.IsGameOver) return;
+
         transform.Translate(Vector3.back * speed * Time.deltaTime);
 
         if (transform.position.z < endZ)
         {
+
+            ObstacleMove.OnObstacleReachedEnd?.Invoke();
+            Destroy(gameObject);
             // Panggil event sebelum reset/destroy
-            if (OnObstacleReachedEnd != null)
-            {
-                OnObstacleReachedEnd();
-            }
+            // if (OnObstacleReachedEnd != null)
+            // {
+            //     OnObstacleReachedEnd();
+            // }
 
             // Untuk game endless runner, biasanya dihancurkan atau di-pool
             Destroy(gameObject); // Atau kembalikan ke object pool

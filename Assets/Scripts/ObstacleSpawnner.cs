@@ -57,6 +57,19 @@ public class ObstacleSpawner : MonoBehaviour
         }
     }
 
+
+    // void SpawnObstacle()
+    // {
+    //     int randomIndex = UnityEngine.Random.Range(0, obstaclePrefabs.Count);
+    //     GameObject selectedPrefab = obstaclePrefabs[randomIndex];
+
+    //     float finalSpawnX = spawnPoint.position.x +
+    //                         UnityEngine.Random.Range(-spawnRangeXOffset, spawnRangeXOffset);
+    //     Vector3 spawnPosition = new Vector3(finalSpawnX, spawnPoint.position.y, spawnPoint.position.z);
+
+    //     Instantiate(selectedPrefab, spawnPosition, Quaternion.identity);
+    // }
+
     void SpawnObstacle()
     {
         int randomIndex = Random.Range(0, obstaclePrefabs.Count);
