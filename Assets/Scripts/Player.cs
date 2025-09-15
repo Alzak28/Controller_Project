@@ -54,6 +54,18 @@ public class Player : MonoBehaviour
         {
             Die();
         }
+
+        if (other.CompareTag("ScoreTrigger"))
+        {
+            // Panggil method AddScore dari GameManager
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.AddScore();
+            }
+            Debug.Log("Score nambah 1");
+            // Optional: Hancurkan atau nonaktifkan trigger agar tidak double score
+            Destroy(other.gameObject);
+        }
     }
 
     void Die()

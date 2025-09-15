@@ -1,13 +1,19 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
+using System;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    [Header("UI")]
-    public TMP_Text scoreText;      
-    public GameObject gameOverPanel; 
+    public event Action OnGameRestarted;
+
+    [Header("UI dan Button")]
+    public TMP_Text scoreText;
+    public GameObject gameOverPanel;
+    public TMP_Text FinalScore;
+    public GameObject buttonRestart;
 
     public bool IsGameOver { get; private set; }
     public int Score { get; private set; }
@@ -20,7 +26,7 @@ public class GameManager : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
     }
 
     void Start()
@@ -30,6 +36,7 @@ public class GameManager : MonoBehaviour
         Score = 0;
         UpdateScoreUI();
         if (gameOverPanel) gameOverPanel.SetActive(false);
+        OnGameRestarted?.Invoke();
     }
 
     public void AddScore(int amount = 1)
@@ -49,13 +56,14 @@ public class GameManager : MonoBehaviour
 
         // Show panel
         if (gameOverPanel) gameOverPanel.SetActive(true);
+        if (FinalScore) FinalScore.text = "Final Score: " + Score.ToString();
 
         Debug.Log("GAME OVER");
     }
 
     void UpdateScoreUI()
     {
-        if (scoreText) scoreText.text = Score.ToString();
+        if (scoreText) scoreText.text = "Score: " + Score.ToString();
     }
 
     // Optional: quick restart
@@ -63,9 +71,13 @@ public class GameManager : MonoBehaviour
     {
         if (IsGameOver && Input.GetKeyDown(KeyCode.R))
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(
-                UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex
-            );
+            RestartGame();
         }
+    }
+    public void RestartGame()
+    {
+        Debug.Log("Restart");
+        //Time.timeScale = 1f; 
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

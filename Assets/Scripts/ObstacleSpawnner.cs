@@ -13,13 +13,19 @@ public class ObstacleSpawner : MonoBehaviour
 
     void OnEnable()
     {
-        // Berlangganan event saat spawner aktif
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnGameRestarted += ResetSpawner; // Tambahkan event restart dari GameManager
+        }
         ObstacleMove.OnObstacleReachedEnd += OnPreviousObstacleCleared;
     }
 
     void OnDisable()
     {
-        // Berhenti berlangganan event saat spawner tidak aktif
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnGameRestarted -= ResetSpawner;
+        }
         ObstacleMove.OnObstacleReachedEnd -= OnPreviousObstacleCleared;
     }
 
@@ -85,5 +91,16 @@ public class ObstacleSpawner : MonoBehaviour
     void OnPreviousObstacleCleared()
     {
         readyToSpawn = true; // Izinkan spawner untuk spawn obstacle berikutnya
+    }
+    public void ResetSpawner()
+    {
+        timer = spawnInterval; // Reset timer
+        readyToSpawn = true;   // Penting: Pastikan ini kembali ke true agar spawner bisa mulai lagi
+        // Hancurkan obstacle yang mungkin masih ada dari game sebelumnya
+        GameObject[] existingObstacles = GameObject.FindGameObjectsWithTag("Obstacle");
+        foreach (GameObject obs in existingObstacles)
+        {
+            Destroy(obs);
+        }
     }
 }

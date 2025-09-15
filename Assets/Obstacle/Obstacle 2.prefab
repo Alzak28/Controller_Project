@@ -336,8 +336,8 @@ GameObject:
   - component: {fileID: 2565000109589867823}
   - component: {fileID: 5402701835577740902}
   m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
+  m_Name: Score trigger
+  m_TagString: ScoreTrigger
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
