@@ -230,13 +230,13 @@ AnimatorState:
   m_Mirror: 0
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
-  m_CycleOffsetParameterActive: 0
+  m_CycleOffsetParameterActive: 1
   m_TimeParameterActive: 0
   m_Motion: {fileID: -2634607000334058842, guid: 0852d53e259eebc468a665e56802bbcc, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
-  m_CycleOffsetParameter: 
+  m_CycleOffsetParameter: Blend
   m_TimeParameter: 
 --- !u!1107 &8825754103553853917
 AnimatorStateMachine:
