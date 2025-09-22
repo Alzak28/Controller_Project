@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     public event Action OnGameRestarted;
+        public GameObject[] posePrefabs;  // Array untuk 4 pose prefab
 
     [Header("UI dan Button")]
     public TMP_Text scoreText;
@@ -79,5 +80,5 @@ public class GameManager : MonoBehaviour
         Debug.Log("Restart");
         //Time.timeScale = 1f; 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
+    } 
 }
