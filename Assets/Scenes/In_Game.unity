@@ -2108,7 +2108,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7dd8df43308107418073bf52a5a661a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  posePrefabs: []
+  posePrefabs:
+  - {fileID: 7824687028758892567, guid: 93f4535355e266a45adbe9c9bbc6ba5a, type: 3}
+  - {fileID: 1558869119322502588, guid: 415d5ff39bc8cac4384e83e61369f095, type: 3}
   scoreText: {fileID: 459220959}
   gameOverPanel: {fileID: 2042074268}
   FinalScore: {fileID: 2073435687}
