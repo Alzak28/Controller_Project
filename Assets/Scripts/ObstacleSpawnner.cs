@@ -49,6 +49,10 @@ public class ObstacleSpawner : MonoBehaviour
 
     void Update()
     {
+        // Cek apakah game sudah mulai
+        if (GameManager.Instance == null || !GameManager.Instance.IsGameStarted)
+            return;
+
         // Hanya hitung mundur timer jika siap dan belum ada obstacle yang di-spawn
         if (readyToSpawn)
         {
@@ -62,6 +66,7 @@ public class ObstacleSpawner : MonoBehaviour
             }
         }
     }
+
 
 
     // void SpawnObstacle()
