@@ -630,6 +630,12 @@ MonoBehaviour:
   obstaclePrefabs:
   - {fileID: 6522676097372313516, guid: c35e3f6ab2cb863488acba8cfba76bcf, type: 3}
   - {fileID: 3391928119225629334, guid: d4002d86f7d67e74dbecd4b22f3726dc, type: 3}
+  - {fileID: 3391928119225629334, guid: 6dd8c1faf6d03f44da90373b8094e5a1, type: 3}
+  - {fileID: 3391928119225629334, guid: 0b8aab905c6afce46bbeabb8a9ea5064, type: 3}
+  - {fileID: 3391928119225629334, guid: 777545718f732c746a735323d09061a5, type: 3}
+  - {fileID: 6522676097372313516, guid: a5773d429a63df940bfc4d2f7a31e6e4, type: 3}
+  - {fileID: 6522676097372313516, guid: 3e542f2f97302c9409094c6065ef8043, type: 3}
+  - {fileID: 6522676097372313516, guid: 580b8732053c3954d8f5d2aa2ec20992, type: 3}
   spawnPoint: {fileID: 299080388}
   spawnInterval: 2
   spawnRangeXOffset: 0
