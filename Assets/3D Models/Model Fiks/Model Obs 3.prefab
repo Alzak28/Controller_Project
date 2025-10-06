@@ -299,7 +299,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60a45be7aa5e4ca418ef871cbb8f4e9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  speed: 7
   resetZ: 20
   endZ: -40
 --- !u!4 &5215132296065730497 stripped

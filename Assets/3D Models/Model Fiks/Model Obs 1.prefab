@@ -60,6 +60,10 @@ PrefabInstance:
       propertyPath: endZ
       value: -40
       objectReference: {fileID: 0}
+    - target: {fileID: 4354014464058259742, guid: 53e9ab3fe09a57848b845f91a67ca8b3, type: 3}
+      propertyPath: speed
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 4459053927051638530, guid: 53e9ab3fe09a57848b845f91a67ca8b3, type: 3}
       propertyPath: m_Name
       value: Model Obs 1

@@ -607,7 +607,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 299080388}
-  - component: {fileID: 299080387}
+  - component: {fileID: 299080389}
   m_Layer: 0
   m_Name: Spawn Obstacle
   m_TagString: Untagged
@@ -615,24 +615,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &299080387
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 299080386}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64a1dbcd0c6e43e449edc68278e87345, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  obstaclePrefabs:
-  - {fileID: 6522676097372313516, guid: c35e3f6ab2cb863488acba8cfba76bcf, type: 3}
-  - {fileID: 3391928119225629334, guid: d4002d86f7d67e74dbecd4b22f3726dc, type: 3}
-  spawnPoint: {fileID: 299080388}
-  spawnInterval: 2
-  spawnRangeXOffset: 0
 --- !u!4 &299080388
 Transform:
   m_ObjectHideFlags: 0
@@ -642,12 +624,33 @@ Transform:
   m_GameObject: {fileID: 299080386}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.7, y: 0, z: 13.13}
+  m_LocalPosition: {x: 3, y: 0, z: 13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &299080389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 299080386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15430dbbdac92e043807d5e047b38261, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  obstaclePrefabs:
+  - {fileID: 6522676097372313516, guid: c35e3f6ab2cb863488acba8cfba76bcf, type: 3}
+  - {fileID: 3391928119225629334, guid: d4002d86f7d67e74dbecd4b22f3726dc, type: 3}
+  - {fileID: 3391928119225629334, guid: 6dd8c1faf6d03f44da90373b8094e5a1, type: 3}
+  - {fileID: 6522676097372313516, guid: 580b8732053c3954d8f5d2aa2ec20992, type: 3}
+  - {fileID: 6522676097372313516, guid: 3e542f2f97302c9409094c6065ef8043, type: 3}
+  spawnPoint: {fileID: 299080388}
+  spawnInterval: 2
+  spawnRangeXOffset: 0
 --- !u!1 &309036506
 GameObject:
   m_ObjectHideFlags: 0
@@ -658,8 +661,6 @@ GameObject:
   m_Component:
   - component: {fileID: 309036510}
   - component: {fileID: 309036509}
-  - component: {fileID: 309036508}
-  - component: {fileID: 309036507}
   - component: {fileID: 309036512}
   - component: {fileID: 309036511}
   - component: {fileID: 309036513}
@@ -670,36 +671,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &309036507
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 309036506}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d750f00ff0ecdb4c9e91d099168319e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  posePrefabs:
-  - {fileID: 1558869119322502588, guid: 415d5ff39bc8cac4384e83e61369f095, type: 3}
-  - {fileID: 7824687028758892567, guid: 93f4535355e266a45adbe9c9bbc6ba5a, type: 3}
-  switchPoseKey: 119
---- !u!114 &309036508
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 309036506}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70aa89a750364a645aab14fac5a5a96f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 5
-  jumpforce: 8
 --- !u!54 &309036509
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -769,7 +740,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d65d264911a6de4bbd3ff4fd03e8a35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  lanes:
+  - {fileID: 7405244056706839390, guid: f98118b1cf699cd42bd33ee5ad27190a, type: 3}
+  - {fileID: 359631024564336554, guid: a05106128fc78824dacdcc5049efaa24, type: 3}
+  - {fileID: 8977635852706976394, guid: 18d07350863b9dd4492580f21e72f796, type: 3}
+  - {fileID: 2525525355271304061, guid: 2a0682bea753c5c4f9429fcf77254b4e, type: 3}
+  currentLane: 1
+  transitionSpeed: 3
   jumpforce: 8
 --- !u!114 &309036513
 MonoBehaviour:
@@ -2723,10 +2700,14 @@ MonoBehaviour:
   buttonRestart: {fileID: 856133044}
   mainMenuPanel: {fileID: 28131932}
   startButton: {fileID: 4437975535601214124}
-  bgMusics: []
-  bgMusicNames: []
-  fxMusics: []
-  fxMusicNames: []
+  bgMusics:
+  - {fileID: 8300000, guid: a85e92b3e3381124097698c4e575fdc3, type: 3}
+  bgMusicNames:
+  - musikgamebg
+  fxMusics:
+  - {fileID: 8300000, guid: 386c6ca16d4352c46a4104d418c6bc4d, type: 3}
+  fxMusicNames:
+  - kalahbg
 --- !u!1 &1732460378
 GameObject:
   m_ObjectHideFlags: 0
