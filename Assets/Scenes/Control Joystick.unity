@@ -728,6 +728,7 @@ MonoBehaviour:
   posePrefabs:
   - {fileID: 1558869119322502588, guid: 415d5ff39bc8cac4384e83e61369f095, type: 3}
   - {fileID: 7824687028758892567, guid: 93f4535355e266a45adbe9c9bbc6ba5a, type: 3}
+  - {fileID: 3295213269691291100, guid: 728984a3ba02a6b44bcdf57bbe3d5dd6, type: 3}
 --- !u!114 &309036512
 MonoBehaviour:
   m_ObjectHideFlags: 0
