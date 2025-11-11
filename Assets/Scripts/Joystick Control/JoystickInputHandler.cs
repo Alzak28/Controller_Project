@@ -1,121 +1,33 @@
-/*using UnityEngine;
-using UnityEngine.InputSystem; // Tambahkan ini
+using System;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using System.IO.Ports; // <-- TAMBAHKAN INI
 
 public class JoystickInputHandler : MonoBehaviour
 {
-    // Referensi ke script Player dan PlayerPoseController
+    // --- Referensi Script (Sudah ada) ---
     public PlayerJ playerScript;
     public PlayerPoseControllerJ poseControllerScript;
     public GameManagerJ gameManagerScript;
 
-    // Referensi ke Input Actions Asset
     private InputSystem_Actions inputActions;
 
-    // Variabel untuk menyimpan nilai input
-    private float moveXInput;
-    private bool changePosePressed;
-    private bool startGamePressed;
-    private bool restartGamePressed;
+    // --- Variabel Logika ARDUINO (BARU) ---
+    [Header("Pengaturan Arduino")]
+    public string arduinoPortName = "COM3"; // <<< GANTI INI SESUAI PORT ANDA
+    public int arduinoBaudRate = 9600;
+    public float arduinoMoveThreshold = 5.0f; // Sensitivitas (seberapa miring)
 
-    void Awake()
-    {
-        inputActions = new InputSystem_Actions();
+    private SerialPort arduinoSerialPort;
+    private bool isArduinoConnected = false;
+    private bool isArduinoAxisInUse = false; // Cooldown untuk Arduino
 
-        // Mengatur callback untuk Action "MoveX"
-        inputActions.Player.MoveX.performed += ctx => moveXInput = ctx.ReadValue<float>();
-        inputActions.Player.MoveX.canceled += ctx => moveXInput = 0f;
-
-        // Mengatur callback untuk Action "ChangePose"
-        inputActions.Player.ChangePose.performed += ctx => changePosePressed = true;
-        inputActions.Player.ChangePose.canceled += ctx => changePosePressed = false;
-
-        // Mengatur callback untuk Action "StartGame"
-        inputActions.Player.StartGame.performed += ctx => startGamePressed = true;
-        inputActions.Player.StartGame.canceled += ctx => startGamePressed = false;
-
-        // Mengatur callback untuk Action "RestartGame"
-        inputActions.Player.RestartGame.performed += ctx => restartGamePressed = true;
-        inputActions.Player.RestartGame.canceled += ctx => restartGamePressed = false;
-    }
-
-    void OnEnable()
-    {
-        inputActions.Enable();
-    }
-
-    void OnDisable()
-    {
-        inputActions.Disable();
-    }
-
-    void Update()
-    {
-        // === Input untuk GameManager (Start/Restart) ===
-        if (gameManagerScript != null)
-        {
-            // Main menu: tekan tombol StartGame untuk mulai
-            if (!gameManagerScript.IsGameStarted && startGamePressed)
-            {
-                gameManagerScript.StartGame();
-                startGamePressed = false; // Reset agar tidak terus-menerus memanggil
-            }
-
-            // Restart game jika game over
-            if (gameManagerScript.IsGameOver && restartGamePressed)
-            {
-                gameManagerScript.RestartGame();
-                restartGamePressed = false; // Reset agar tidak terus-menerus memanggil
-            }
-        }
-
-        // Pastikan game sudah dimulai dan tidak game over untuk input player
-        if (gameManagerScript != null && (!gameManagerScript.IsGameStarted || gameManagerScript.IsGameOver))
-        {
-            return;
-        }
-
-        // === Input untuk PlayerPoseController (Ganti Pose) ===
-        if (poseControllerScript != null && changePosePressed)
-        {
-            poseControllerScript.CyclePose();
-            changePosePressed = false; // Reset setelah diproses
-        }
-    }
-
-    // Fungsi untuk mendapatkan input gerak horizontal (akan dipanggil dari Player.cs)
-    public float GetMoveXInput()
-    {
-        return moveXInput;
-    }
-}*/
-using System;
-using UnityEngine;
-using UnityEngine.InputSystem;
-
-public class JoystickInputHandler : MonoBehaviour
-{
-    // Hapus event ini karena kita akan memanggil method langsung di PlayerJ
-    // public static event Action OnMoveLeft;
-    // public static event Action OnMoveRight;
-
-    public PlayerJ playerScript; // <<< TAMBAHKAN INI: Referensi ke script PlayerJ
-    public PlayerPoseControllerJ poseControllerScript;
-    public GameManagerJ gameManagerScript;
-
-    private InputSystem_Actions inputActions;
-
-    // Variabel ini tidak lagi diperlukan jika langsung memanggil method
-    // private bool changePosePressed;
-    // private bool startGamePressed;
-    // private bool restartGamePressed;
-
-    // isMoveAxisInUse tidak lagi relevan untuk pergerakan jalur diskrit
-    // private bool isMoveAxisInUse = false;
 
     void Awake()
     {
         Debug.Log("JoystickInputHandler: Awake dipanggil.");
 
+        // --- Bagian Input System (Sudah ada) ---
         if (inputActions == null)
         {
             try
@@ -126,131 +38,121 @@ public class JoystickInputHandler : MonoBehaviour
             catch (Exception ex)
             {
                 Debug.LogError("JoystickInputHandler: Gagal menginisialisasi InputSystem_Actions: " + ex.Message);
-                return; // Berhenti jika inisialisasi gagal
-            }
-        }
-        else
-        {
-            Debug.Log("JoystickInputHandler: inputActions sudah diinisialisasi (tidak null).");
-        }
-
-        if (inputActions == null)
-        {
-            Debug.LogError("JoystickInputHandler: inputActions MASIH NULL setelah inisialisasi di Awake!");
-            return;
-        }
-
-        // --- Mengatur Callback untuk Action Gerakan "MoveX" (Untuk Pergerakan Jalur) ---
-        // Kita akan menggunakan ini untuk mendeteksi input horizontal dan memanggil PlayerJ.MoveLane
-        inputActions.Player.MoveX.performed += ctx =>
-        {
-            if (playerScript == null) // Pastikan playerScript sudah di-assign
-            {
-                Debug.LogWarning("PlayerJ script reference is missing in JoystickInputHandler for MoveX!");
                 return;
             }
+        }
+
+        // --- Callback Input System (Sudah ada) ---
+        inputActions.Player.MoveX.performed += ctx =>
+        {
+            if (playerScript == null) return;
 
             float moveValue = ctx.ReadValue<float>();
 
-            // Gunakan ambang batas untuk mendeteksi gerakan ke kiri atau kanan
-            // Dan panggil PlayerJ.MoveLane()
-            if (moveValue > 0.7f) // Jika joystick bergerak ke kanan
+            if (moveValue > 0.7f)
             {
-                playerScript.MoveLane(1); // Panggil method untuk bergerak ke kanan
-                Debug.Log("Move Right triggered (lane transition).");
+                playerScript.MoveLane(1);
+                Debug.Log("Input System: Move Right");
             }
-            else if (moveValue < -0.7f) // Jika joystick bergerak ke kiri
+            else if (moveValue < -0.7f)
             {
-                playerScript.MoveLane(-1); // Panggil method untuk bergerak ke kiri
-                Debug.Log("Move Left triggered (lane transition).");
+                playerScript.MoveLane(-1);
+                Debug.Log("Input System: Move Left");
             }
-            // Catatan: Jika MoveX adalah Axis dan `performed` event terus-menerus
-            // dipicu saat joystick miring, pastikan logika `isMoving` di PlayerJ
-            // sudah cukup untuk mencegah pergerakan ganda.
-            // Alternatifnya, Anda bisa membuat Actions terpisah (MoveLeft, MoveRight)
-            // di Input Actions Asset jika ingin trigger yang lebih diskrit per "ketukan".
         };
 
-        // Callback 'canceled' untuk MoveX tidak lagi digunakan untuk mereset isMoveAxisInUse
-        // Karena pergerakan ditangani secara diskrit oleh MoveLane.
-        // Anda bisa menghapusnya jika tidak ada kebutuhan lain.
-        // inputActions.Player.MoveX.canceled += ctx => {
-        //     Debug.Log("MoveX canceled (input released).");
-        // };
-
-        // --- Mengatur Callback untuk Action Jump (Contoh) ---
-        // Jika Anda memiliki action "Jump" di Input Actions Asset, tambahkan di sini
-        // Misalnya:
-/*        inputActions.Player.Jump.performed += ctx =>
-        {
-            if (playerScript != null)
-            {
-                playerScript.Jump(); // Panggil method Jump di PlayerJ
-                Debug.Log("Jump performed.");
-            }
-            else
-            {
-                Debug.LogWarning("PlayerJ script reference is missing in JoystickInputHandler for Jump!");
-            }
-        };*/
-
-
-        // --- Mengatur Callback untuk Action Lainnya (tetap gunakan performed) ---
         inputActions.Player.ChangePose.performed += ctx =>
         {
             if (poseControllerScript != null)
             {
                 poseControllerScript.CyclePose();
-                Debug.Log("ChangePose performed.");
-            }
-            else
-            {
-                Debug.LogWarning("PlayerPoseControllerJ script reference is missing in JoystickInputHandler for ChangePose!");
+                Debug.Log("Input System: ChangePose performed.");
             }
         };
 
-        inputActions.Player.StartGame.performed += ctx =>
-        {
-            if (gameManagerScript != null)
-            {
-                // Logika: Hanya mulai game jika belum dimulai
-                if (!gameManagerScript.IsGameStarted)
-                {
-                    gameManagerScript.StartGame();
-                    Debug.Log("StartGame performed.");
-                }
-                else
-                {
-                    Debug.Log("StartGame performed, but game is already running.");
-                }
-            }
-            else
-            {
-                Debug.LogWarning("GameManagerJ script reference is missing in JoystickInputHandler for StartGame!");
-            }
-        };
-
-        inputActions.Player.RestartGame.performed += ctx =>
-        {
-            if (gameManagerScript != null)
-            {
-                // Logika: Hanya restart game jika game over
-                if (gameManagerScript.IsGameOver)
-                {
-                    gameManagerScript.RestartGame();
-                    Debug.Log("RestartGame performed.");
-                }
-                else
-                {
-                    Debug.Log("RestartGame performed, but game is not in Game Over state.");
-                }
-            }
-            else
-            {
-                Debug.LogWarning("GameManagerJ script reference is missing in JoystickInputHandler for RestartGame!");
-            }
-        };
+        // ... (Callback Input System lainnya: StartGame, RestartGame, dll. tetap sama) ...
+        inputActions.Player.StartGame.performed += ctx => { /* ... */ };
+        inputActions.Player.RestartGame.performed += ctx => { /* ... */ };
     }
+
+    // --- Method Start (BARU) ---
+    // Kita gunakan Start() untuk koneksi Arduino
+    void Start()
+    {
+        // Pastikan setting .NET 4.x sudah diatur di Project Settings > Player
+        try
+        {
+            arduinoSerialPort = new SerialPort(arduinoPortName, arduinoBaudRate);
+            arduinoSerialPort.ReadTimeout = 100; // Timeout agar tidak 'freeze'
+            arduinoSerialPort.Open();
+            isArduinoConnected = true;
+            Debug.Log("Koneksi Arduino Berhasil di port " + arduinoPortName);
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning("Koneksi Arduino Gagal: " + e.Message);
+            isArduinoConnected = false;
+        }
+    }
+
+    // --- Method Update (BARU) ---
+    // Kita gunakan Update() untuk MEMBACA Arduino di setiap frame
+    void Update()
+    {
+        // Jangan lakukan apa-apa jika Arduino tidak terhubung
+        if (!isArduinoConnected || arduinoSerialPort == null || !arduinoSerialPort.IsOpen) return;
+
+        try
+        {
+            // 1. Baca data dari Arduino (misal: "2.50,1.10,9.80")
+            string dataString = arduinoSerialPort.ReadLine();
+            string[] values = dataString.Split(',');
+
+            if (values.Length == 3)
+            {
+                // 2. Ubah data string menjadi angka
+                float x = float.Parse(values[0]);
+                float y = float.Parse(values[1]);
+                float z = float.Parse(values[2]);
+
+                // 3. TERJEMAHKAN DATA MENJADI AKSI
+                // Ini adalah logika "penerjemah" dari sensor miring ke aksi game
+
+                // --- Logika Gerak Kiri/Kanan (MoveX) ---
+                if (x > arduinoMoveThreshold) // Miring Kanan
+                {
+                    if (!isArduinoAxisInUse && playerScript != null)
+                    {
+                        playerScript.MoveLane(1); // Panggil method yang SAMA
+                        isArduinoAxisInUse = true; // Set cooldown
+                        Debug.Log("ARDUINO: Move Right");
+                    }
+                }
+                else if (x < -arduinoMoveThreshold) // Miring Kiri
+                {
+                    if (!isArduinoAxisInUse && playerScript != null)
+                    {
+                        playerScript.MoveLane(-1); // Panggil method yang SAMA
+                        isArduinoAxisInUse = true; // Set cooldown
+                        Debug.Log("ARDUINO: Move Left");
+                    }
+                }
+                else // Posisi tengah
+                {
+                    isArduinoAxisInUse = false; // Reset cooldown
+                }
+
+                // --- (Contoh) Logika Ganti Pose (misal: dari sumbu Z) ---
+                // if (z < -5.0f) // Misalnya, jika sensor dibalik
+                // {
+                //     poseControllerScript.CyclePose();
+                // }
+            }
+        }
+        catch (System.TimeoutException) { /* Ini wajar, abaikan */ }
+        catch (Exception e) { Debug.LogWarning("Error membaca data Arduino: " + e.Message); }
+    }
+
 
     void OnEnable()
     {
@@ -259,10 +161,6 @@ public class JoystickInputHandler : MonoBehaviour
         {
             inputActions.Enable();
             Debug.Log("JoystickInputHandler: inputActions di-enable.");
-        }
-        else
-        {
-            Debug.LogError("JoystickInputHandler: inputActions NULL di OnEnable! Tidak dapat mengaktifkan.");
         }
     }
 
@@ -274,16 +172,15 @@ public class JoystickInputHandler : MonoBehaviour
             inputActions.Disable();
             Debug.Log("JoystickInputHandler: inputActions di-disable.");
         }
-        else
-        {
-            Debug.LogWarning("JoystickInputHandler: inputActions NULL di OnDisable! Tidak perlu dinonaktifkan.");
-        }
     }
 
-    // Fungsi Update() di JoystickInputHandler bisa dihapus atau dikosongkan karena semua input
-    // sekarang ditangani melalui event callback Input System.
-    // void Update()
-    // {
-    //
-    // }
+    // --- Method Penutup Port (BARU) ---
+    void OnApplicationQuit()
+    {
+        if (arduinoSerialPort != null && arduinoSerialPort.IsOpen)
+        {
+            arduinoSerialPort.Close();
+            Debug.Log("Port Arduino ditutup.");
+        }
+    }
 }

@@ -764,6 +764,9 @@ MonoBehaviour:
   playerScript: {fileID: 309036512}
   poseControllerScript: {fileID: 309036511}
   gameManagerScript: {fileID: 1577665377}
+  arduinoPortName: COM3
+  arduinoBaudRate: 9600
+  arduinoMoveThreshold: 5
 --- !u!1 &314480182
 GameObject:
   m_ObjectHideFlags: 0
