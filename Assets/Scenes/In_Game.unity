@@ -688,7 +688,9 @@ MonoBehaviour:
   posePrefabs:
   - {fileID: 1558869119322502588, guid: 415d5ff39bc8cac4384e83e61369f095, type: 3}
   - {fileID: 7824687028758892567, guid: 93f4535355e266a45adbe9c9bbc6ba5a, type: 3}
-  switchPoseKey: 119
+  sensor: {fileID: 1577665377}
+  poseTriggerY: 0.5
+  poseCooldown: 0.8
 --- !u!114 &309036508
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -708,6 +710,10 @@ MonoBehaviour:
   - {fileID: 7013549065397626758}
   currentLane: 1
   transitionSpeed: 5
+  sensor: {fileID: 1577665377}
+  tiltThreshold: 0.2
+  tiltHysteresis: 0.08
+  laneCooldown: 0.5
 --- !u!54 &309036509
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2614,6 +2620,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1577665376}
   - component: {fileID: 1577665375}
+  - component: {fileID: 1577665377}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -2665,6 +2672,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1577665377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1577665374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4591d7c232137574db5442368cd6c061, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  portName: COM3
+  baudRate: 9600
+  debugRawData: 1
+  smoothing: 0.15
+  deadzone: 0.05
+  sensitivity: 1
+  rawX: 0
+  rawY: 0
+  rawZ: 0
+  X: 0
+  Y: 0
+  Z: 0
+  offsetX: 0
+  offsetY: 0
+  offsetZ: 0
 --- !u!1 &1732460378
 GameObject:
   m_ObjectHideFlags: 0

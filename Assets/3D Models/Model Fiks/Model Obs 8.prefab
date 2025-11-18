@@ -80,6 +80,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: ded229de20de25249977783aa96886db, type: 2}
+    - target: {fileID: 6014276368302726222, guid: 53e9ab3fe09a57848b845f91a67ca8b3, type: 3}
+      propertyPath: m_TagString
+      value: Obstacle
+      objectReference: {fileID: 0}
     - target: {fileID: 6054966576483552365, guid: 53e9ab3fe09a57848b845f91a67ca8b3, type: 3}
       propertyPath: m_LocalPosition.x
       value: -18
@@ -92,6 +96,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: ded229de20de25249977783aa96886db, type: 2}
+    - target: {fileID: 8628832136965883851, guid: 53e9ab3fe09a57848b845f91a67ca8b3, type: 3}
+      propertyPath: m_TagString
+      value: Obstacle
+      objectReference: {fileID: 0}
     - target: {fileID: 8717465969220168234, guid: 53e9ab3fe09a57848b845f91a67ca8b3, type: 3}
       propertyPath: m_CastShadows
       value: 0

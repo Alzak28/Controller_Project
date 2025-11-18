@@ -1,61 +1,58 @@
-using System;
 using UnityEngine;
 
 public class PlayerPoseController : MonoBehaviour
 {
-    public GameObject[] posePrefabs;  // Array untuk 4 pose prefab
+    public GameObject[] posePrefabs;
     private GameObject currentPoseInstance;
-    private int currentPoseIndex = 0; // Menggunakan index untuk pose
-    public KeyCode switchPoseKey = KeyCode.E;   // Tombol untuk ganti pose
+    private int currentPoseIndex = 0;
+
+    [Header("Sensor")]
+    public ArduinoController sensor; // drag ArduinoController
+    public float poseTriggerY = 0.6f; // ambang Y untuk trigger pose (g)
+    public float poseCooldown = 0.8f;
+    float lastPoseTime = -10f;
 
     void Start()
     {
-        // Set Pose awal (misalnya PoseA)
-        if (posePrefabs.Length > 0)
-        {
-            SetPose(currentPoseIndex); 
-        }
-        else
-        {
-            Debug.LogError("No Pose Prefabs assigned!");
-        }
+        if (posePrefabs.Length > 0) SetPose(currentPoseIndex);
+        else Debug.LogError("No Pose Prefabs assigned!");
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(switchPoseKey))
+        // input sensor
+        if (sensor != null)
+        {
+            if (Time.time - lastPoseTime >= poseCooldown)
+            {
+                if (sensor.Y > poseTriggerY)
+                {
+                    CyclePose();
+                    lastPoseTime = Time.time;
+                }
+            }
+        }
+
+        // keyboard fallback (optional)
+        if (Input.GetKeyDown(KeyCode.E))
         {
             CyclePose();
         }
     }
 
-    // Fungsi untuk mengganti pose
     public void CyclePose()
     {
-        Debug.Log("Switching Pose");
-        currentPoseIndex = (currentPoseIndex + 1) % posePrefabs.Length; // Update pose index dengan modulo
-        Debug.Log("Next Pose Index: " + currentPoseIndex);
-        SetPose(currentPoseIndex); // Ganti pose sesuai index
+        currentPoseIndex = (currentPoseIndex + 1) % posePrefabs.Length;
+        SetPose(currentPoseIndex);
     }
 
-    // Fungsi untuk set pose sesuai index
     void SetPose(int poseIndex)
     {
-        // Hapus pose sebelumnya
-        if (currentPoseInstance != null)
-        {
-            Destroy(currentPoseInstance);
-        }
-
-        // Instantiate prefab pose yang baru
+        if (currentPoseInstance != null) Destroy(currentPoseInstance);
         if (poseIndex >= 0 && poseIndex < posePrefabs.Length)
         {
             currentPoseInstance = Instantiate(posePrefabs[poseIndex], transform.position, transform.rotation);
-            currentPoseInstance.transform.SetParent(transform); // Set parent untuk sinkronisasi posisi
-        }
-        else
-        {
-            Debug.LogError("Invalid pose index!");
+            currentPoseInstance.transform.SetParent(transform);
         }
     }
 }
